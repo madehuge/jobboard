@@ -3,7 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Header from './components/Header';
 import Footer from './components/Footer';
-
+import UserCard from './components/UserCard/UserCard';
+import CounterComponent from './components/CounterComponent';
 import './App.css'
 
 function App() {
@@ -25,10 +26,14 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+        
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
+      <UserCard />
+      <CounterComponent />
+    
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
