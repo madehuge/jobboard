@@ -15,7 +15,7 @@ body.login-bg {
   justify-content: flex-end;
   align-items: center;
   min-height: 100vh;
-  padding-right: 50px;
+  padding-right: 10px;
 }
 
 .login-box {
