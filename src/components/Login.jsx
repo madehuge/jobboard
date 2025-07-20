@@ -1,89 +1,110 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../Login.css';
 
-
-import '../Login.css'; // Create this CSS file for login-specific styles
-
-
+const loginUser = async ({ email, password }) => {
+  const response = await axios.post(
+    'https://reqres.in/api/login',
+    { email, password },
+    {
+      headers: {
+        'x-api-key': 'reqres-free-v1',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  return response.data;
+};
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const navigate = useNavigate();
 
-useEffect(() => {
-    // Add login background class to body
+  useEffect(() => {
     document.body.classList.add('login-bg');
-
-    // Cleanup when component unmounts (goes to other page)
     return () => {
       document.body.classList.remove('login-bg');
     };
   }, []);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-    const navigate = useNavigate();
-
+  const mutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      alert('Login Successful!');
+      console.log('Token:', data.token);
+      navigate('/dashboard');
+    },
+    onError: (error) => {
+      setErrorMsg('Invalid email or password.');
+      console.error('Login error:', error.response?.data || error.message);
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (email === 'admin@example.com' && password === 'admin123') {
-      alert('Login Successful!');
-      setErrorMsg('');
-    } else {
-      setErrorMsg('Invalid email or password.');
-    }
+    setErrorMsg('');
+    mutation.mutate({ email, password });
   };
 
   return (
-    <>
-      {/* Header with background */}
-      <div className="login-container">
-        <div
-          className="card shadow p-4 m-5"
-          style={{
-            maxWidth: '400px',
-            width: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          }}
-        >
-          <h3 className="text-center mb-4">🚀 Welcome Back</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email address</label>
-              <input
-                type="email"
-                id="email"
-                className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="e.g. admin@example.com"
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label text-align-left">Password</label>
-              <input
-                type="password"
-                id="password"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Enter your password"
-              />
-            </div>
-            <div className="d-grid">
-              <button type="submit" className="btn btn-primary">Login</button>
-            </div>
-            {errorMsg && (
-              <p className="mt-3 text-center text-danger">{errorMsg}</p>
-            )}
-          </form>
-          {/* Go to Home Button */}
+    <div className="login-container">
+      <div
+        className="card shadow p-4 m-5"
+        style={{
+          maxWidth: '400px',
+          width: '100%',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        }}
+      >
+        <h3 className="text-center mb-4">
+          Welcome back. Fill up below form to continue
+          <br />
+          <small className="text-muted">
+            Test Details: email: eve.holt@reqres.in &nbsp; password: cityslicka
+          </small>
+        </h3>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email address</label>
+            <input
+              type="email"
+              id="email"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="e.g. eve.holt@reqres.in"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Enter your password"
+            />
+          </div>
+          <div className="d-grid">
+            <button type="submit" className="btn btn-primary" disabled={mutation.isLoading}>
+              {mutation.isLoading ? 'Logging in...' : 'Login'}
+            </button>
+          </div>
+          {errorMsg && (
+            <p className="mt-3 text-center text-danger">{errorMsg}</p>
+          )}
+        </form>
+
         <div className="d-grid mt-3">
           <button
             type="button"
@@ -93,10 +114,8 @@ useEffect(() => {
             Go to Home
           </button>
         </div>
-        </div>
       </div>
-
-    </>
+    </div>
   );
 }
 
