@@ -1,13 +1,19 @@
 import React from 'react';
 
-function CardItem({ name, sendToParent }) {
-  // When the div is clicked, call the function passed from the parent
-  const handleClick = () => {
-    sendToParent(name); // send name back to parent
-  };
-
+function CardItem({ name, sendToParent, bgColor, onChange }) {
   return (
-    <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+    <div
+      style={{
+        backgroundColor: bgColor,
+        padding: '20px',
+        margin: '10px',
+        color: '#fff',
+        cursor: 'pointer',
+        borderRadius: '8px'
+      }}
+      onClick={() => sendToParent(name)} // send data to parent
+      onMouseEnter={onChange} // or use onClick/onChange as you wish
+    >
       {name}
     </div>
   );
