@@ -1,0 +1,26 @@
+/* src/Login.css */
+body.login-bg {
+  background-image: url('./assets/bg/job-bg.jpg'); /* Put image inside public/ */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Optional container to right-align login box */
+.login-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 100vh;
+  padding-right: 50px;
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 10px;
+  width: 400px;
+}

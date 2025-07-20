@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+import '../Login.css'; // Create this CSS file for login-specific styles
+
+
+
 function Login() {
+
+useEffect(() => {
+    // Add login background class to body
+    document.body.classList.add('login-bg');
+
+    // Cleanup when component unmounts (goes to other page)
+    return () => {
+      document.body.classList.remove('login-bg');
+    };
+  }, []);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -24,15 +41,7 @@ function Login() {
   return (
     <>
       {/* Header with background */}
-      <body
-        className="w-100 d-flex justify-content-end align-items-center"
-        style={{
-            backgroundImage: 'url("../../src/assets/bg/job-bg.jpg")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            height: '80vh',
-        }}
-        >
+      <div className="login-container">
         <div
           className="card shadow p-4 m-5"
           style={{
@@ -85,7 +94,7 @@ function Login() {
           </button>
         </div>
         </div>
-      </body>
+      </div>
 
     </>
   );
